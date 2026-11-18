@@ -8,57 +8,60 @@ const descriptionDisplay = document.getElementById("description");
 const errorMessage = document.getElementById("error-message");
 
 
-    const API_KEY = "21y1y298189y81y2812223y7y873y287"; //env variables
+const API_KEY = "f3fecdddc7b5e77dc87253f261931f3b"; //env variables
 
- getWeatherBtn.addEventListener('click', async () => {
+
+getWeatherBtn.addEventListener('click',  async () => {
     const city = cityInput.value.trim();
-
-    if(!city) return;
-    // it may throw an error
-    // server/database is always in anothe continent
-
+    if(!city) return ;
+    //it may throw an error
+    //server/database is always in another continent
 
     try {
         const weatherData = await fetchWeatherData(city);
-        displayWeatherData(data);
+        displayWeatherData(weatherData);
     } catch (error) {
         showError();
     }
- 
-
-});
-
+})
+  
 async function fetchWeatherData(city){
-//gets the data
-const url = `https://api.openweathermap.org/data/4.0/onecall/current?lat=52.2297&lon=21.0122&units=metric&lang=en&appid=${API_KEY}`;
+    //gets the data
+
+    
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`; 
+
+
+
 
     const response = await fetch(url);
-    console.log(typeof response);
-    console.log("RESPONSE", response);
-    
-    if (!response.ok) {
+    // console.log(typeof response);
+    // console.log("RESPONSE", response);
+        
+    if(!response.ok){
         throw new Error("city not found");
+        }
+        const data = await response.json();
+        return data;
     }
-    const data = await response.json();
-    return data;
-}
 
 function displayWeatherData(data){
-console.log(data);
-const { name, main, weather } = data;
-cityNameDisplay.textContent = name;
-temperatureDisplay.textContent = `Temperature : ${main.temp}`;
-descriptionDisplay.textContent = `Weather : ${weather[0].description}`;
+    console.log(data);
+    const {name, main, weather} = data;
+    cityNameDisplay.textContent = name;
+    temperatureDisplay.textContent = `Temperature : ${main.temp}`;
+    descriptionDisplay.textContent = `Weather : ${weather[0].description}`;
 
-
-//unlock the display
-weatherInfo.classList.remove("hidden");
-errorMessage.classList.add("hidden");
+    //unlock the display
+    weatherInfo.classList.remove("hidden");
+    errorMessage.classList.add("hidden");
+    
 }
 
 function showError(){
 weatherInfo.classList.add("hidden");
 errorMessage.classList.remove("hidden");
 }
-
+    
 });
+
