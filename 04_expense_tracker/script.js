@@ -10,4 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderExpenses();
 
-  
+  expenseForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = expenseNameInput.value.trim();
+    const amount = parseFloat(expenseAmountInput.value);
+
+    if (name && !isNaN(amount) && amount > 0) {
+      const expense = { name, amount };
+      expenses.push(expense); 
